@@ -4,6 +4,7 @@ CREATE TABLE ROOM(
     PRIMARY KEY(ROOM_ID));
 
 -- Creates the Player Table with the foreign key dependence to the Room
+-- Creates the recursive relationship that allows players to attack other players
 CREATE TABLE PLAYER(
     PLAYER_ID    VARCHAR(10)    NOT NULL   UNIQUE,
     TITLE       VARCHAR(15)     NOT NULL,
@@ -11,10 +12,11 @@ CREATE TABLE PLAYER(
     HEALTH  INTEGER             NOT NULL, CONSTRAINT HEALTH_Ck CHECK(HEALTH BETWEEN 1 AND 100),
     CLASS   VARCHAR(15)         NOT NULL,
     ROLE    VARCHAR(15)         NOT NULL,
-    ATTACK_TARGET   VARCHAR(10)     UNIQUE,
+    PVP_TARGET   VARCHAR(10)     UNIQUE,
     ROOM_ID VARCHAR(10)         NOT NULL    UNIQUE,
     PRIMARY KEY(PLAYER_ID),
-    FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID));
+    FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID),
+    FOREIGN KEY(PVP_TARGET) REFERENCES PLAYER(PLAYER_ID));
 
 -- Creates the Boss Table with the foreign key dependence to the Room
 CREATE TABLE BOSS(
@@ -27,6 +29,7 @@ CREATE TABLE BOSS(
     PRIMARY KEY(BOSS_ID),
     FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID));
 
+-- Creates the Monster Table with the foreign key dependence to the Room
 CREATE TABLE MONSTER(
     MONSTER_ID  VARCHAR(10) NOT NULL    UNIQUE,
     CNAME   VARCHAR(30) NOT NULL,
@@ -37,3 +40,4 @@ CREATE TABLE MONSTER(
     ROOM_ID VARCHAR(10) NOT NULL UNIQUE,
     PRIMARY KEY(MONSTER_ID),
     FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID));
+
